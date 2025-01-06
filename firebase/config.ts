@@ -19,22 +19,45 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-let user = auth.currentUser;
 
 export async function SignIn(email: string, password: string) {
-	signInWithEmailAndPassword(auth, email, password)
-		.then((userCredential) => {
-			// Signed in
-			user = userCredential.user;
-			// const rawUser = userCredential.user;
-			// const userCredentials = fetch(api de carlos)
-			// user=userCredentials.data
-			// ...
-		})
-		.catch((error) => {
-			// const errorCode = error.code;
-			const errorMessage = error.message;
-			console.log(errorMessage);
-		});
+	try {
+		const userCredential = await signInWithEmailAndPassword(auth, email, password);
+		// const idToken = await userCredential.user.getIdToken();
+
+		// // Send Firebase token to your backend
+		// const response = await fetch('YOUR_BACKEND_URL/auth/login', {
+		// 	method: 'POST',
+		// 	headers: {'Content-Type': 'application/json'},
+		// 	body: JSON.stringify({firebaseToken: idToken}),
+		// });
+
+		// if (!response.ok) throw new Error('Authentication failed');
+
+		// const {token} = await response.json();
+		// // Store backend token in cookie
+		// document.cookie = `authToken=${token}; path=/; secure; samesite=strict`;
+
+		// Manually add auth token to cookie for demonstration purposes
+		document.cookie = `authToken=123; path=/; secure; samesite=strict`;
+
+		return userCredential.user;
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
 }
-export {app, auth, user};
+
+export async function SignOut() {
+	try {
+		await auth.signOut();
+		// Remove auth token
+		document.cookie = 'authToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT';
+		// Let AuthContext handle the navigation
+	} catch (error) {
+		console.error(error);
+		throw error;
+	}
+}
+
+export {app, auth};

@@ -1,7 +1,7 @@
 'use client';
 
-import {SignIn} from '@/firebase/config';
 import {useState} from 'react';
+import {SignIn} from '@/firebase/config';
 
 type LoginFormProps = {
 	placeholder?: string;
@@ -13,7 +13,6 @@ export function LoginForm({placeholder = 'Usuario'}: LoginFormProps) {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		// Handle login logic here
 		// console.log('Login attempt:', {username, password});
 		await SignIn(username, password);
 	};
