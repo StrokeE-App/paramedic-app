@@ -25,7 +25,7 @@ export default function Login() {
 	}, [router]);
 
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-center p-24 gap-8">
+		<main className="flex min-h-screen flex-col items-center justify-center p-8 gap-8">
 			<StrokeeLogo />
 			<LoginForm placeholder="Id. Ambulancia" />
 		</main>
