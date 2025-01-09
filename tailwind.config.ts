@@ -11,6 +11,10 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        customBlack: "var(--custom-black)",
+        customGreen: "var(--custom-green)",
+        customRed: "var(--custom-red)",
+        customWhite: "var(--custom-white)",
       },
     },
   },
