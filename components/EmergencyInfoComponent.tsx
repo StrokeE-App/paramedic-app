@@ -17,7 +17,7 @@ export default function EmergencyInfoComponent({
 }: EmergencyInfo) {
   const readableString = emergencyTime ? emergencyTime.toLocaleString() : "Ahorita"
   return (
-    <div className="w-full max-w-md mx-auto p-6 ">
+    <div className="w-11/12 mx-auto p-6 ">
       <div className="text-center space-y-6">
         <div className="pb-4">
           <h1 className="text-2xl font-bold inline-block px-4 pb-1">
@@ -27,7 +27,7 @@ export default function EmergencyInfoComponent({
         
         <div className="grid grid-cols-2 gap-x-6 gap-y-6">
           <div>
-            <h2 className="text-custom-black text-sm font-bold">Teléfono</h2>
+            <h2 className="text-custom-black font-bold text-sm">Teléfono</h2>
             <p className="text-custom-black font-medium">{userPhone}</p>
           </div>
           <div>
@@ -43,7 +43,7 @@ export default function EmergencyInfoComponent({
             <p className="text-custom-black font-medium">{userHeight} m</p>
           </div>
           <div>
-            <h2 className="text-custom-black tex  t-sm font-bold">Nivel De Stroke</h2>
+            <h2 className="text-custom-black text-sm font-bold">Nivel De Stroke</h2>
             <p className="text-custom-black font-medium">{strokeLevel}</p>
           </div>
           <div>
