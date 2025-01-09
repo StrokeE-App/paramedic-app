@@ -3,6 +3,7 @@
 import React, {useState, useEffect} from 'react'
 import { EmergencyInfo } from '@/types';
 import EmergencyInfoComponent from '@/components/EmergencyInfoComponent';
+import ConfirmStrokeComponent from '@/components/ConfirmStrokeComponent';
 export default function EmergencyClientPage({
   params,
 }: {
@@ -10,7 +11,7 @@ export default function EmergencyClientPage({
 }) {
   const { emergencyId } = React.use(params);
   const [emergency, setEmergency] = useState< EmergencyInfo | null >(null);
-  const myEmergencyId = emergencyId ?? "123";
+  const myEmergencyId = emergencyId || "123";
   const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
     
   useEffect(() => {
@@ -36,6 +37,7 @@ export default function EmergencyClientPage({
     <div>
       <h1 className=''>🔙</h1>
       <EmergencyInfoComponent {...emergency}/>
+      <ConfirmStrokeComponent emergencyId={myEmergencyId}/>
     </div>
   )
 }
