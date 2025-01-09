@@ -39,5 +39,5 @@ export async function middleware(request: NextRequest) {
 
 // Add the paths that need authentication
 export const config = {
-	matcher: ['/dashboard/:path*', '/patients/:path*', '/test'], // Add your protected routes here
+	matcher: ['/dashboard/:path*', '/patients/:path*', '/test', '/emergency/:path*'], // Add your protected routes here
 };
