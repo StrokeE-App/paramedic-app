@@ -17,8 +17,6 @@ export default function EmergencyClientPage({params}: {params: Promise<{emergenc
 	const [emergency, setEmergency] = useState<EmergencyInfo | null>(null);
 	const myEmergencyId = emergencyId || '123';
 
-	console.log(myEmergencyId);
-
 	useEffect(() => {
 		// Fetch emergency info
 		// setEmergency(emergencyInfo);
