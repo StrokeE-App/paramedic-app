@@ -41,7 +41,7 @@ const Map = ({
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
         crossOrigin=""
       />
-      <div id="map" className="w-10/12 h-80 mx-auto my-6"></div>
+      <div id="map" className="w-10/12 h-80 mx-auto my-6 z-20"></div>
     </>
   );
 };
