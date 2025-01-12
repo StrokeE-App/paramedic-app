@@ -23,23 +23,23 @@ const auth = getAuth(app);
 export async function SignIn(email: string, password: string) {
 	try {
 		const userCredential = await signInWithEmailAndPassword(auth, email, password);
-		// const idToken = await userCredential.user.getIdToken();
+		const idToken = await userCredential.user.getIdToken();
 
 		// // Send Firebase token to your backend
-		// const response = await fetch('YOUR_BACKEND_URL/auth/login', {
-		// 	method: 'POST',
-		// 	headers: {'Content-Type': 'application/json'},
-		// 	body: JSON.stringify({firebaseToken: idToken}),
-		// });
+		const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json'},
+			body: JSON.stringify({token: idToken}),
+		});
 
-		// if (!response.ok) throw new Error('Authentication failed');
+		if (!response.ok) throw new Error('Authentication failed');
 
-		// const {token} = await response.json();
-		// // Store backend token in cookie
-		// document.cookie = `authToken=${token}; path=/; secure; samesite=strict`;
+		const {userId} = await response.json();
+		// Store backend token in cookie
+		document.cookie = `authToken=${userId}; path=/; secure; samesite=strict`;
 
 		// Manually add auth token to cookie for demonstration purposes
-		document.cookie = `authToken=123; path=/; secure; samesite=strict`;
+		// document.cookie = `authToken=123; path=/; secure; samesite=strict`;
 
 		return userCredential.user;
 	} catch (error) {

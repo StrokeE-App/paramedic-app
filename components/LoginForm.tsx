@@ -22,11 +22,11 @@ export function LoginForm({placeholder = 'Usuario'}: LoginFormProps) {
 			<div className="space-y-4">
 				<div>
 					<input
-						type="text"
+						type="email"
 						placeholder={placeholder}
 						value={username}
 						onChange={(e) => setUserName(e.target.value)}
-						className="w-full px-4 py-3 rounded-full border border-gray-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+						className="w-full px-4 py-3 rounded-full border border-gray-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-customRed focus:border-transparent"
 						required
 					/>
 				</div>
@@ -36,14 +36,14 @@ export function LoginForm({placeholder = 'Usuario'}: LoginFormProps) {
 						placeholder="Contraseña"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
-						className="w-full px-4 py-3 rounded-full border border-gray-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+						className="w-full px-4 py-3 rounded-full border border-gray-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-customRed focus:border-transparent"
 						required
 					/>
 				</div>
 			</div>
 			<button
 				type="submit"
-				className="w-full px-4 py-3 text-white bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+				className="w-full px-4 py-3 text-white bg-customRed rounded-full hover:bg-gustomRed focus:outline-none focus:ring-2 focus:ring-customRed focus:ring-offset-2 transition-colors"
 			>
 				Iniciar Sesión
 			</button>
