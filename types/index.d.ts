@@ -8,5 +8,5 @@ export type EmergencyInfo = {
   userHeight: double;
   emergencyTime: Date;
   strokeLevel?: string;
-  emergencyLocation: string;
+  emergencyLocation: {latitude: double; longitude: double};
 };
