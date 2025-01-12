@@ -28,7 +28,7 @@ export default function ConfirmStrokeComponent({ emergencyId }: ConfirmStrokeCom
     setIsModalOpen(true); // Abre el modal
   };
   return (
-    <div className="w-10/12 max-w-md mx-auto flex flex-col space-y-4">
+    <div className="w-10/12 max-w-md mx-auto flex flex-col space-y-4 mb-5">
       <Button
         title="Confirmar Stroke"
         onClick={() => openModal("¿Estás seguro que quieres confirmar el stroke?", "confirm")}
