@@ -4,6 +4,14 @@ import { useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+// Custom marker icon
+const customIcon = L.icon({
+  iconUrl: "/custom-marker.svg", // Path to your custom marker image
+  iconSize: [38, 38], // Size of the icon [width, height]
+  iconAnchor: [19, 38], // Anchor point of the icon (tip of the marker)
+  popupAnchor: [0, -38], // Anchor point for the popup relative to the icon
+});
+
 const Map = ({
   latitude,
   longitude,
@@ -21,17 +29,17 @@ const Map = ({
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
-    // Add marker
-    L.marker([latitude, longitude])
+    // Add marker with custom icon
+    L.marker([latitude, longitude], { icon: customIcon })
       .addTo(map)
-      .bindPopup("A pretty CSS3 popup.<br> Easily customizable.")
+      .bindPopup("Ubicación de la emergencia")
       .openPopup();
 
     // Cleanup function
     return () => {
       map.remove();
     };
-  }, []);
+  }, [latitude, longitude]);
 
   return (
     <>
