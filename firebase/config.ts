@@ -38,6 +38,9 @@ export async function SignIn(email: string, password: string) {
 		// Store backend token in cookie
 		document.cookie = `authToken=${userId}; path=/; secure; samesite=strict`;
 
+		// Redirect to dashboard
+		window.location.href = '/dashboard';
+
 		// Manually add auth token to cookie for demonstration purposes
 		// document.cookie = `authToken=123; path=/; secure; samesite=strict`;
 
