@@ -20,34 +20,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-export async function SignIn(email: string, password: string) {
-	try {
-		const userCredential = await signInWithEmailAndPassword(auth, email, password);
-		// const idToken = await userCredential.user.getIdToken();
-
-		// // Send Firebase token to your backend
-		// const response = await fetch('YOUR_BACKEND_URL/auth/login', {
-		// 	method: 'POST',
-		// 	headers: {'Content-Type': 'application/json'},
-		// 	body: JSON.stringify({firebaseToken: idToken}),
-		// });
-
-		// if (!response.ok) throw new Error('Authentication failed');
-
-		// const {token} = await response.json();
-		// // Store backend token in cookie
-		// document.cookie = `authToken=${token}; path=/; secure; samesite=strict`;
-
-		// Manually add auth token to cookie for demonstration purposes
-		document.cookie = `authToken=123; path=/; secure; samesite=strict`;
-
-		return userCredential.user;
-	} catch (error) {
-		console.error(error);
-		throw error;
-	}
-}
-
 export async function SignOut() {
 	try {
 		await auth.signOut();
@@ -56,6 +28,47 @@ export async function SignOut() {
 		// Let AuthContext handle the navigation
 	} catch (error) {
 		console.error(error);
+		throw error;
+	}
+}
+
+export async function SignIn(email: string, password: string) {
+	try {
+		const userCredential = await signInWithEmailAndPassword(auth, email, password);
+		const idToken = await userCredential.user.getIdToken();
+
+		// Send Firebase token to your backend
+		const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/login`, {
+			method: 'POST',
+			headers: {'Content-Type': 'application/json', 'x-app-identifier': 'paramedics'},
+			body: JSON.stringify({token: idToken}),
+		});
+
+		if (!response.ok) {
+			await SignOut();
+			const {message} = await response.json();
+			throw new Error(message);
+		}
+
+		// Store backend token in cookie
+		document.cookie = `authToken=${idToken}; path=/; secure; samesite=strict`;
+
+		// Redirect to dashboard
+		window.location.href = '/dashboard';
+
+		// Manually add auth token to cookie for demonstration purposes
+		// document.cookie = `authToken=123; path=/; secure; samesite=strict`;
+
+		return userCredential.user;
+	} catch (error) {
+		console.error(error);
+
+		// Check if is a credential error and show a custom message
+		const firebaseError = error as {code?: string};
+		if (firebaseError.code === 'auth/user-not-found' || firebaseError.code === 'auth/invalid-credential') {
+			throw new Error('Usuario o contraseña incorrecta.');
+		}
+
 		throw error;
 	}
 }

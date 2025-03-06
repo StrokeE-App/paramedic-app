@@ -9,7 +9,7 @@ const emergency1: EmergencyInfo = {
 	userWeight: 77.5,
 	userHeight: 170.5,
 	emergencyTime: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
-	emergencyLocation: 'Calle 123',
+	emergencyLocation: {latitude: 3.467754, longitude: -76.483429},
 };
 
 const emergency2: EmergencyInfo = {
@@ -21,7 +21,7 @@ const emergency2: EmergencyInfo = {
 	userWeight: 65.2,
 	userHeight: 165.0,
 	emergencyTime: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
-	emergencyLocation: 'Carrera 45 #67-89',
+	emergencyLocation: {latitude: 3.467754, longitude: -76.483429},
 };
 
 const emergency3: EmergencyInfo = {
@@ -33,7 +33,7 @@ const emergency3: EmergencyInfo = {
 	userWeight: 82.3,
 	userHeight: 178.0,
 	emergencyTime: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
-	emergencyLocation: 'Avenida 78 #12-34',
+	emergencyLocation: {latitude: 3.467754, longitude: -76.483429},
 };
 
 const emergenciesList: EmergencyInfo[] = [emergency1, emergency2, emergency3];

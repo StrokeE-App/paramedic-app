@@ -30,7 +30,7 @@ export default function SettingsMenu() {
 	return (
 		<>
 			{/* Settings Button */}
-			<div onClick={() => setIsOpen(true)} className="flex items-center gap-2 text-red-600 cursor-pointer z-20">
+			<div onClick={() => setIsOpen(true)} className="flex items-center gap-2 text-customRed cursor-pointer z-20">
 				<Settings className="w-8 h-8" />
 				<span className="text-lg font-medium">Configuración</span>
 			</div>
@@ -45,7 +45,7 @@ export default function SettingsMenu() {
 				}`}
 			>
 				{/* Panel Header */}
-				<div className="relative bg-red-600 text-white p-6">
+				<div className="relative bg-customRed text-white p-6">
 					<h2 className="text-2xl font-medium">Hola,</h2>
 					<p className="text-2xl font-black">Paramédico!</p>
 					<X onClick={() => setIsOpen(false)} className="absolute top-6 right-6 w-6 h-6 cursor-pointer" />
@@ -53,7 +53,7 @@ export default function SettingsMenu() {
 
 				{/* Panel Footer with Logout Button */}
 				<div className="absolute bottom-0 left-0 right-0 p-6">
-					<button onClick={handleLogOut} className="text-red-600 text-lg font-medium hover:text-red-700">
+					<button onClick={handleLogOut} className="text-customRed text-lg font-medium hover:text-red-700">
 						Cerrar sesión
 					</button>
 				</div>

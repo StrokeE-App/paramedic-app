@@ -2,32 +2,29 @@
 
 import {useEffect} from 'react';
 import {useRouter} from 'next/navigation';
-
-// Firebase
-import {auth} from '@/firebase/config';
-
-// Components
+import {useAuth} from '@/context/AuthContext';
 import {LoginForm} from '@/components/LoginForm';
 import {StrokeeLogo} from '@/components/StrokeeLogo';
 
 export default function Login() {
 	const router = useRouter();
+	const {isAuthenticated, isLoading} = useAuth();
 
 	useEffect(() => {
-		const unsubscribe = auth.onAuthStateChanged((user) => {
-			if (user) {
-				console.log(user);
-				router.push('/dashboard');
-			}
-		});
-
-		return () => unsubscribe();
-	}, [router]);
+		if (!isLoading && isAuthenticated) {
+			router.push('/dashboard');
+		}
+	}, [isLoading, isAuthenticated, router]);
 
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-center p-8 gap-8">
 			<StrokeeLogo />
-			<LoginForm placeholder="Id. Ambulancia" />
+
+			{isLoading ? (
+				<div className="w-6 h-6 border-2 border-customRed border-t-transparent rounded-full animate-spin" />
+			) : (
+				<LoginForm placeholder="Id. Ambulancia" />
+			)}
 		</main>
 	);
 }

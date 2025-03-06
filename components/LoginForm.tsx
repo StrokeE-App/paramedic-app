@@ -2,19 +2,30 @@
 
 import {useState} from 'react';
 import {SignIn} from '@/firebase/config';
+import toast from 'react-hot-toast';
 
-type LoginFormProps = {
-	placeholder?: string;
-};
-
-export function LoginForm({placeholder = 'Usuario'}: LoginFormProps) {
+export function LoginForm() {
 	const [username, setUserName] = useState('');
 	const [password, setPassword] = useState('');
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		// console.log('Login attempt:', {username, password});
-		await SignIn(username, password);
+		setIsLoading(true);
+		const loadingToast = toast.loading('Iniciando sesión...');
+
+		try {
+			await SignIn(username, password);
+			toast.success('¡Bienvenido!', {id: loadingToast});
+		} catch (error) {
+			if (error instanceof Error) {
+				toast.error(error.message, {id: loadingToast});
+			} else {
+				toast.error('Un error inesperado ha ocurrido.', {id: loadingToast});
+			}
+		} finally {
+			setIsLoading(false);
+		}
 	};
 
 	return (
@@ -22,11 +33,11 @@ export function LoginForm({placeholder = 'Usuario'}: LoginFormProps) {
 			<div className="space-y-4">
 				<div>
 					<input
-						type="text"
-						placeholder={placeholder}
+						type="email"
+						placeholder="Correo Electrónico"
 						value={username}
 						onChange={(e) => setUserName(e.target.value)}
-						className="w-full px-4 py-3 rounded-full border border-gray-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+						className="w-full px-4 py-3 rounded-full border border-gray-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-customRed focus:border-transparent"
 						required
 					/>
 				</div>
@@ -36,16 +47,17 @@ export function LoginForm({placeholder = 'Usuario'}: LoginFormProps) {
 						placeholder="Contraseña"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
-						className="w-full px-4 py-3 rounded-full border border-gray-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+						className="w-full px-4 py-3 rounded-full border border-gray-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-customRed focus:border-transparent"
 						required
 					/>
 				</div>
 			</div>
 			<button
 				type="submit"
-				className="w-full px-4 py-3 text-white bg-red-600 rounded-full hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+				disabled={isLoading}
+				className="w-full px-4 py-3 text-white bg-customRed rounded-full hover:bg-gustomRed focus:outline-none focus:ring-2 focus:ring-customRed focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
 			>
-				Iniciar Sesión
+				{isLoading ? 'Cargando...' : 'Iniciar Sesión'}
 			</button>
 		</form>
 	);
