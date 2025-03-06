@@ -7,7 +7,13 @@ import {emergenciesList} from '@/mocks/emergency';
 import EmergencyCard from '@/components/EmergencyCard';
 import SettingsMenu from '@/components/SettingsMenu';
 
+// Context
+import {useSseContext} from '@/context/SseContext';
+
 export default function Dashboard() {
+	const {emergencies: data, isConnected, error} = useSseContext();
+
+	console.log({data, isConnected, error});
 	return (
 		<main className="min-h-screen bg-white p-4">
 			{/* Header */}
