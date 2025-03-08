@@ -33,7 +33,7 @@ const emergency3: EmergencyInfo = {
 	userWeight: 82.3,
 	userHeight: 178.0,
 	emergencyTime: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
-	emergencyLocation: {latitude:3.467754, longitude: -76.483429},
+	emergencyLocation: {latitude: 3.467754, longitude: -76.483429},
 };
 
 const emergenciesList: EmergencyInfo[] = [emergency1, emergency2, emergency3];
