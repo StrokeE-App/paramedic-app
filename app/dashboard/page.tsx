@@ -12,7 +12,7 @@ export default function Dashboard() {
 
 	console.log({data, isConnected, error});
 
-	if (!data) {
+	if (data === null) {
 		return (
 			<main className="min-h-screen bg-white p-4">
 				{/* Header */}
@@ -21,6 +21,20 @@ export default function Dashboard() {
 				{/* Main Content */}
 				<div className="mt-12 px-4 flex flex-col items-center w-full">
 					<h1 className="text-3xl font-bold text-gray-900 mb-8">Cargando...</h1>
+				</div>
+			</main>
+		);
+	}
+
+	if (data === undefined) {
+		return (
+			<main className="min-h-screen bg-white p-4">
+				{/* Header */}
+				<SettingsMenu />
+
+				{/* Main Content */}
+				<div className="mt-12 px-4 flex flex-col items-center w-full">
+					<h1 className="text-center text-3xl font-bold text-gray-900 mb-8">No hay emergencias disponibles</h1>
 				</div>
 			</main>
 		);
