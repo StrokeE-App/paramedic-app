@@ -28,10 +28,12 @@ export default function RootLayout({
 	return (
 		<html lang="es">
 			<body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-customWhite`}>
-				<SseProvider>
-					<AuthProvider>{children}</AuthProvider>
+				<AuthProvider>
+					<SseProvider>
+						{children}
+					</SseProvider>
 					<Toaster position="top-center" />
-				</SseProvider>
+				</AuthProvider>
 			</body>
 		</html>
 	);
