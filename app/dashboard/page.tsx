@@ -53,7 +53,7 @@ export default function Dashboard() {
 				{data.map((emergency) => (
 					<EmergencyCard
 						key={emergency.emergencyId}
-						userName={`${emergency.patient.firstName}`}
+						userName={`${emergency.patient.firstName} ${emergency.patient.lastName}`}
 						userPhone={emergency.patient.phoneNumber}
 						emergencyId={emergency.emergencyId}
 						emergency={emergency}
