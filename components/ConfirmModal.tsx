@@ -1,65 +1,49 @@
 'use client';
 
-import { useEffect } from 'react';
+import {useEffect} from 'react';
+import {ReactNode} from 'react';
 
 interface ConfirmModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  title: string;
+	isOpen: boolean;
+	onClose: () => void;
+	onConfirm: () => void;
+	title: string;
+	children?: ReactNode;
 }
 
-export default function ConfirmModal({ isOpen, onClose, onConfirm, title }: ConfirmModalProps) {
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
+export default function ConfirmModal({isOpen, onClose, onConfirm, title, children}: ConfirmModalProps) {
+	useEffect(() => {
+		const handleEscape = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				onClose();
+			}
+		};
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden';
-    }
+		if (isOpen) {
+			document.addEventListener('keydown', handleEscape);
+		}
 
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
-    };
-  }, [isOpen, onClose]);
+		return () => {
+			document.removeEventListener('keydown', handleEscape);
+		};
+	}, [isOpen, onClose]);
 
-  if (!isOpen) return null;
+	if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/50" 
-        onClick={onClose}
-        aria-hidden="true"
-      />
-      
-      {/* Modal */}
-      <div className="relative bg-white rounded-lg w-[90%] max-w-sm p-6 shadow-lg" role="dialog" aria-modal="true">
-        <div className="text-center space-y-6">
-          <h2 className="text-lg font-medium">
-            {title}
-          </h2>
-          
-          <div className="flex gap-4 justify-center">
-            <button
-              onClick={onConfirm}
-              className="px-8 py-2 rounded-md bg-customGreen text-customBlack font-bold hover:bg-green-200 transition-colors"
-            >
-              Si
-            </button>
-            <button
-              onClick={onClose}
-              className="px-8 py-2 rounded-md border border-red-500 text-red-500 hover:bg-red-50 transition-colors"
-            >
-              No
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+			<div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+				<h2 className="text-xl font-bold mb-4">{title}</h2>
+				{children}
+				<div className="flex justify-end space-x-4 mt-6">
+					<button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
+						Cancelar
+					</button>
+					<button onClick={onConfirm} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+						Confirmar
+					</button>
+				</div>
+			</div>
+		</div>
+	);
 }

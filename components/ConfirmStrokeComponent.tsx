@@ -1,15 +1,19 @@
 'use client';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 // Components
 import Button from './Button';
 import ConfirmModal from './ConfirmModal';
+import SearchableSelect from './SearchableSelect';
 import toast from 'react-hot-toast';
 
 // API
 import apiClient from '@/api/apiClient';
 import {useRouter} from 'next/navigation';
+
+// Context
+import {useClinics} from '@/context/ClinicContext';
 
 export type ConfirmStrokeComponentProps = {
 	emergencyId: string;
@@ -17,19 +21,34 @@ export type ConfirmStrokeComponentProps = {
 
 export default function ConfirmStrokeComponent({emergencyId}: ConfirmStrokeComponentProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [modalTitle, setModalTitle] = useState(''); // Estado para el título dinámico
-	const [actionType, setActionType] = useState(''); // Estado para el tipo de acción
+	const [modalTitle, setModalTitle] = useState('');
+	const [actionType, setActionType] = useState('');
+	const [selectedClinic, setSelectedClinic] = useState<string>('');
+	const {clinics, isLoading} = useClinics();
 
 	const router = useRouter();
 
+	// Set initial clinic when clinics are loaded
+	useEffect(() => {
+		if (clinics.length > 0 && !selectedClinic) {
+			setSelectedClinic(clinics[0].id);
+		}
+	}, [clinics, selectedClinic]);
+
 	// Confirm emergency
 	const confirmEmergency = async () => {
+		if (!selectedClinic) {
+			toast.error('Por favor selecciona una clínica');
+			return;
+		}
+
 		const loadingToast = toast.loading('Confirmando emergencia...');
 		try {
 			const pickupDate = new Date().toISOString().slice(0, 19);
 			await apiClient.post('/paramedic/confirm-stroke', {
 				emergencyId,
 				pickupDate,
+				clinicId: selectedClinic,
 			});
 			toast.success('Emergencia confirmada', {id: loadingToast});
 			router.push('/dashboard');
@@ -67,20 +86,30 @@ export default function ConfirmStrokeComponent({emergencyId}: ConfirmStrokeCompo
 	};
 
 	const openModal = (title: string, action: string) => {
-		setModalTitle(title); // Establece el título dinámico
-		setActionType(action); // Establece el tipo de acción
-		setIsModalOpen(true); // Abre el modal
+		setModalTitle(title);
+		setActionType(action);
+		setIsModalOpen(true);
 	};
+
 	return (
 		<div className="w-10/12 max-w-md mx-auto flex flex-col space-y-4 mb-5">
 			<Button title="Confirmar Stroke" onClick={() => openModal('¿Estás seguro que quieres confirmar el stroke?', 'confirm')} color="red" />
 			<Button title="Descartar Stroke" onClick={() => openModal('¿Estás seguro que quieres descartar el stroke?', 'discard')} color="green" />
-			<ConfirmModal
-				isOpen={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-				onConfirm={handleConfirm}
-				title={modalTitle} // Pasamos el título dinámico
-			/>
+
+			<ConfirmModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={handleConfirm} title={modalTitle}>
+				{actionType === 'confirm' && (
+					<div className="mt-4">
+						<SearchableSelect
+							options={clinics}
+							value={selectedClinic}
+							onChange={setSelectedClinic}
+							label="Selecciona una clínica"
+							placeholder="Buscar clínica..."
+							disabled={isLoading}
+						/>
+					</div>
+				)}
+			</ConfirmModal>
 		</div>
 	);
 }
