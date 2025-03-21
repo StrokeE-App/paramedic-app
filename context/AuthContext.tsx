@@ -23,8 +23,8 @@ export function AuthProvider({children}: {children: React.ReactNode}) {
 	const [user, setUser] = useState<User | null>(null);
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [isLoading, setIsLoading] = useState(true);
-	const intervalRef = useRef<NodeJS.Timeout>();
-	const timeoutRef = useRef<NodeJS.Timeout>();
+	const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const router = useRouter();
 
 	// Check if the auth token is present in the cookie and set the state accordingly
