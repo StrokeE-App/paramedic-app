@@ -48,7 +48,7 @@ export default function ConfirmStrokeComponent({emergencyId}: ConfirmStrokeCompo
 			await apiClient.post('/paramedic/confirm-stroke', {
 				emergencyId,
 				pickupDate,
-				clinicId: selectedClinic,
+				healthcenterId: selectedClinic,
 			});
 			toast.success('Emergencia confirmada', {id: loadingToast});
 			router.push('/dashboard');
@@ -96,7 +96,7 @@ export default function ConfirmStrokeComponent({emergencyId}: ConfirmStrokeCompo
 			<Button title="Confirmar Stroke" onClick={() => openModal('¿Estás seguro que quieres confirmar el stroke?', 'confirm')} color="red" />
 			<Button title="Descartar Stroke" onClick={() => openModal('¿Estás seguro que quieres descartar el stroke?', 'discard')} color="green" />
 
-			<ConfirmModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={handleConfirm} title={modalTitle}>
+			<ConfirmModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={handleConfirm} title={modalTitle} disabled={!selectedClinic}>
 				{actionType === 'confirm' && (
 					<div className="mt-4">
 						<SearchableSelect

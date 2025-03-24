@@ -1,8 +1,17 @@
 'use client';
 
-import React, {createContext, useContext, ReactNode} from 'react';
+import React, {createContext, useContext, ReactNode, useState, useEffect} from 'react';
 import {useSseEvents} from '@/hooks/useSseEvents';
 import {EmergencyInfo} from '@/types';
+import apiClient from '@/api/apiClient';
+import {useAuth} from '@/context/AuthContext';
+
+interface ParamedicData {
+	firstName: string;
+	lastName: string;
+	ambulanceId: string;
+	email: string;
+}
 
 interface SseContextType {
 	emergencies: EmergencyInfo[] | null;
@@ -13,9 +22,32 @@ interface SseContextType {
 const SseContext = createContext<SseContextType | undefined>(undefined);
 
 export function SseProvider({children}: {children: ReactNode}) {
+	const [paramedicData, setParamedicData] = useState<ParamedicData | null>(null);
+	const {isAuthenticated, user} = useAuth();
+
+	// Always call the hook, but with a dummy URL when we don't have paramedic data
 	const {data, isConnected, error} = useSseEvents<EmergencyInfo[]>({
-		url: `${process.env.NEXT_PUBLIC_NOTIFICATION_BACKEND_URL}/paramedic-notification/emergencies/AM-1`,
+		url: paramedicData
+			? `${process.env.NEXT_PUBLIC_NOTIFICATION_BACKEND_URL}/paramedic-notification/emergencies/${paramedicData.ambulanceId}`
+			: `${process.env.NEXT_PUBLIC_NOTIFICATION_BACKEND_URL}/paramedic-notification/emergencies/dummy`,
+		initialConnect: !!paramedicData, // Only connect when we have paramedic data
 	});
+
+	// Fetch paramedic data
+	useEffect(() => {
+		const fetchParamedicData = async () => {
+			if (!isAuthenticated || !user?.uid) return;
+
+			try {
+				const response = await apiClient.get<{message: string; data: ParamedicData}>(`/paramedic/${user.uid}`);
+				setParamedicData(response.data.data);
+			} catch (error) {
+				console.error('Error fetching paramedic data:', error);
+			}
+		};
+
+		fetchParamedicData();
+	}, [isAuthenticated, user?.uid]);
 
 	return <SseContext.Provider value={{emergencies: data, isConnected, error}}>{children}</SseContext.Provider>;
 }
