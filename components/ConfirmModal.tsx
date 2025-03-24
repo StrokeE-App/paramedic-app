@@ -9,9 +9,10 @@ interface ConfirmModalProps {
 	onConfirm: () => void;
 	title: string;
 	children?: ReactNode;
+	disabled?: boolean;
 }
 
-export default function ConfirmModal({isOpen, onClose, onConfirm, title, children}: ConfirmModalProps) {
+export default function ConfirmModal({isOpen, onClose, onConfirm, title, children, disabled = false}: ConfirmModalProps) {
 	useEffect(() => {
 		const handleEscape = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {
@@ -39,7 +40,11 @@ export default function ConfirmModal({isOpen, onClose, onConfirm, title, childre
 					<button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
 						Cancelar
 					</button>
-					<button onClick={onConfirm} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+					<button
+						onClick={onConfirm}
+						disabled={disabled}
+						className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-400"
+					>
 						Confirmar
 					</button>
 				</div>
