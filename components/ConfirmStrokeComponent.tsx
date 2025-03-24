@@ -17,13 +17,16 @@ import {useClinics} from '@/context/ClinicContext';
 
 export type ConfirmStrokeComponentProps = {
 	emergencyId: string;
+	status?: string;
 };
 
-export default function ConfirmStrokeComponent({emergencyId}: ConfirmStrokeComponentProps) {
+export default function ConfirmStrokeComponent({emergencyId, status = 'TO_AMBULANCE'}: ConfirmStrokeComponentProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isDeliveryModalOpen, setIsDeliveryModalOpen] = useState(false);
 	const [modalTitle, setModalTitle] = useState('');
 	const [actionType, setActionType] = useState('');
 	const [selectedClinic, setSelectedClinic] = useState<string>('');
+	const [deliveryDate, setDeliveryDate] = useState<string>(new Date().toISOString().slice(0, 19));
 	const {clinics, isLoading} = useClinics();
 
 	const router = useRouter();
@@ -75,6 +78,25 @@ export default function ConfirmStrokeComponent({emergencyId}: ConfirmStrokeCompo
 		}
 	};
 
+	// Mark patient as delivered
+	const markAsDelivered = async () => {
+		const loadingToast = toast.loading('Registrando entrega del paciente...');
+		try {
+			// Convert the local datetime to UTC ISO string
+			const utcDate = new Date(deliveryDate).toISOString();
+			// console.log(utcDate);
+			await apiClient.post('/paramedic/deliver-patient', {
+				emergencyId,
+				deliveredDate: utcDate,
+			});
+			toast.success('Paciente entregado correctamente', {id: loadingToast});
+			router.push('/dashboard');
+		} catch (error) {
+			toast.error('Error al registrar la entrega del paciente', {id: loadingToast});
+			console.error(error);
+		}
+	};
+
 	// Handle confirm or discard action
 	const handleConfirm = () => {
 		if (actionType === 'confirm') {
@@ -85,6 +107,20 @@ export default function ConfirmStrokeComponent({emergencyId}: ConfirmStrokeCompo
 		setIsModalOpen(false);
 	};
 
+	const handleDeliveryModalOpen = () => {
+		// Get current date in local timezone
+		const now = new Date();
+		// Format it as YYYY-MM-DDThh:mm for the datetime-local input
+		const localDate = now.toLocaleString('sv', {timeZone: 'America/Bogota'}).replace(' ', 'T');
+		setDeliveryDate(localDate);
+		setIsDeliveryModalOpen(true);
+	};
+
+	const handleDeliveryConfirm = () => {
+		markAsDelivered();
+		setIsDeliveryModalOpen(false);
+	};
+
 	const openModal = (title: string, action: string) => {
 		setModalTitle(title);
 		setActionType(action);
@@ -93,8 +129,14 @@ export default function ConfirmStrokeComponent({emergencyId}: ConfirmStrokeCompo
 
 	return (
 		<div className="w-10/12 max-w-md mx-auto flex flex-col space-y-4 mb-5">
-			<Button title="Confirmar Stroke" onClick={() => openModal('¿Estás seguro que quieres confirmar el stroke?', 'confirm')} color="red" />
-			<Button title="Descartar Stroke" onClick={() => openModal('¿Estás seguro que quieres descartar el stroke?', 'discard')} color="green" />
+			{status === 'TO_AMBULANCE' && (
+				<>
+					<Button title="Confirmar Stroke" onClick={() => openModal('¿Estás seguro que quieres confirmar el stroke?', 'confirm')} color="red" />
+					<Button title="Descartar Stroke" onClick={() => openModal('¿Estás seguro que quieres descartar el stroke?', 'discard')} color="green" />
+				</>
+			)}
+
+			{status === 'CONFIRMED' && <Button title="Paciente Entregado" onClick={handleDeliveryModalOpen} color="blue" />}
 
 			<ConfirmModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={handleConfirm} title={modalTitle} disabled={!selectedClinic}>
 				{actionType === 'confirm' && (
@@ -109,6 +151,23 @@ export default function ConfirmStrokeComponent({emergencyId}: ConfirmStrokeCompo
 						/>
 					</div>
 				)}
+			</ConfirmModal>
+
+			<ConfirmModal
+				isOpen={isDeliveryModalOpen}
+				onClose={() => setIsDeliveryModalOpen(false)}
+				onConfirm={handleDeliveryConfirm}
+				title="¿Estás seguro que quieres registrar la entrega del paciente?"
+			>
+				<div className="mt-4">
+					<label className="block text-sm font-medium text-gray-700 mb-2">Fecha y hora de entrega (Hora Colombia)</label>
+					<input
+						type="datetime-local"
+						value={deliveryDate}
+						onChange={(e) => setDeliveryDate(e.target.value)}
+						className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+					/>
+				</div>
 			</ConfirmModal>
 		</div>
 	);
