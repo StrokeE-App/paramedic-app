@@ -13,5 +13,7 @@ export type EmergencyInfo = {
 	patient: EmergencyPatient;
 	startDate: Date;
 	nihScale?: number;
+	status: 'TO_AMBULANCE' | 'CONFIRMED' | 'DELIVERED';
+	// deliveredDate: string | null;
 	// emergencyLocation: {latitude: double; longitude: double};
 };

@@ -14,8 +14,8 @@ const DynamicMap = dynamic(() => import('@/components/Map'), {
 import EmergencyInfoComponent from '@/components/EmergencyInfoComponent';
 import ConfirmStrokeComponent from '@/components/ConfirmStrokeComponent';
 import toast from 'react-hot-toast';
-import { useSearchParams } from 'next/navigation';
-import { useSseContext } from '@/context/SseContext';
+import {useSearchParams} from 'next/navigation';
+import {useSseContext} from '@/context/SseContext';
 
 export default function EmergencyClientPage({params}: {params: Promise<{emergencyId: string}>}) {
 	const {emergencyId} = React.use(params); // Get emergencyId from URL
@@ -96,7 +96,7 @@ export default function EmergencyClientPage({params}: {params: Promise<{emergenc
 					{' '}
 					<EmergencyInfoComponent emergency={emergency} />
 					<DynamicMap latitude={3.382325} longitude={-76.528043} />
-					<ConfirmStrokeComponent emergencyId={emergencyId} />
+					<ConfirmStrokeComponent emergencyId={emergencyId} status={emergency.status} />
 				</>
 			)}
 		</div>

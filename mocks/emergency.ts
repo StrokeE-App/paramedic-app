@@ -3,6 +3,7 @@ import {EmergencyInfo} from '@/types';
 const emergency1: EmergencyInfo = {
 	emergencyId: '123',
 	startDate: new Date(Date.now() - 5 * 60 * 1000), // 5 minutes ago
+	status: 'TO_AMBULANCE',
 	patient: {
 		firstName: 'Juan',
 		lastName: 'Perez',
@@ -17,6 +18,7 @@ const emergency1: EmergencyInfo = {
 const emergency2: EmergencyInfo = {
 	emergencyId: '456',
 	startDate: new Date(Date.now() - 15 * 60 * 1000), // 15 minutes ago
+	status: 'CONFIRMED',
 	patient: {
 		firstName: 'María',
 		lastName: 'López',
@@ -31,6 +33,7 @@ const emergency2: EmergencyInfo = {
 const emergency3: EmergencyInfo = {
 	emergencyId: '789',
 	startDate: new Date(Date.now() - 30 * 60 * 1000), // 30 minutes ago
+	status: 'DELIVERED',
 	patient: {
 		firstName: 'Carlos',
 		lastName: 'Rodríguez',
