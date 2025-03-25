@@ -6,6 +6,7 @@ import {SseProvider} from '@/context/SseContext';
 import {ClinicProvider} from '@/context/ClinicContext';
 import {Toaster} from 'react-hot-toast';
 import ServiceWorkerRegistration from './components/ServiceWorkerRegistration';
+import NotificationPermission from '@/components/NotificationPermission';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -52,6 +53,7 @@ export default function RootLayout({
 				<AuthProvider>
 					<SseProvider>
 						<ClinicProvider>
+							<NotificationPermission />
 							{children}
 							<Toaster position="top-center" />
 						</ClinicProvider>

@@ -31,3 +31,31 @@ self.addEventListener('fetch', (event) => {
 		})
 	);
 });
+
+// Handle push notifications
+self.addEventListener('push', function (event) {
+	const options = {
+		body: event.data.text(),
+		icon: '/strokee-192x192.png',
+		badge: '/strokee-192x192.png',
+		vibrate: [200, 100, 200],
+		tag: 'new-emergency',
+		renotify: true,
+		actions: [
+			{action: 'open', title: 'Abrir'},
+			{action: 'close', title: 'Cerrar'},
+		],
+	};
+
+	event.waitUntil(self.registration.showNotification('Nueva Emergencia', options));
+});
+
+// Handle notification click
+self.addEventListener('notificationclick', function (event) {
+	event.notification.close();
+
+	if (event.action === 'open') {
+		// Open the app when notification is clicked
+		event.waitUntil(clients.openWindow('/'));
+	}
+});
