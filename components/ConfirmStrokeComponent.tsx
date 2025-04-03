@@ -28,6 +28,7 @@ export default function ConfirmStrokeComponent({emergencyId, status = 'TO_AMBULA
 	const [selectedClinic, setSelectedClinic] = useState<string>('');
 	const [deliveryDate, setDeliveryDate] = useState<string>(new Date().toISOString().slice(0, 19));
 	const {clinics, isLoading} = useClinics();
+	const [patientStatus, setPatientStatus] = useState<string>(status);
 
 	const router = useRouter();
 
@@ -54,10 +55,10 @@ export default function ConfirmStrokeComponent({emergencyId, status = 'TO_AMBULA
 				healthcenterId: selectedClinic,
 			});
 			toast.success('Emergencia confirmada', {id: loadingToast});
-			router.push('/dashboard');
-		} catch (error) {
+			setPatientStatus('CONFIRMED');
+			// router.push('/dashboard');
+		} catch {
 			toast.error('Error al confirmar la emergencia', {id: loadingToast});
-			console.error(error);
 		}
 	};
 
@@ -72,9 +73,8 @@ export default function ConfirmStrokeComponent({emergencyId, status = 'TO_AMBULA
 			});
 			toast.success('Emergencia descartada', {id: loadingToast});
 			router.push('/dashboard');
-		} catch (error) {
+		} catch {
 			toast.error('Error al descartar la emergencia', {id: loadingToast});
-			console.error(error);
 		}
 	};
 
@@ -91,9 +91,8 @@ export default function ConfirmStrokeComponent({emergencyId, status = 'TO_AMBULA
 			});
 			toast.success('Paciente entregado correctamente', {id: loadingToast});
 			router.push('/dashboard');
-		} catch (error) {
+		} catch {
 			toast.error('Error al registrar la entrega del paciente', {id: loadingToast});
-			console.error(error);
 		}
 	};
 
@@ -129,14 +128,14 @@ export default function ConfirmStrokeComponent({emergencyId, status = 'TO_AMBULA
 
 	return (
 		<div className="w-10/12 max-w-md mx-auto flex flex-col space-y-4 mb-5">
-			{status === 'TO_AMBULANCE' && (
+			{patientStatus === 'TO_AMBULANCE' && (
 				<>
 					<Button title="Confirmar Stroke" onClick={() => openModal('¿Estás seguro que quieres confirmar el stroke?', 'confirm')} color="red" />
 					<Button title="Descartar Stroke" onClick={() => openModal('¿Estás seguro que quieres descartar el stroke?', 'discard')} color="green" />
 				</>
 			)}
 
-			{status === 'CONFIRMED' && <Button title="Paciente Entregado" onClick={handleDeliveryModalOpen} color="blue" />}
+			{patientStatus === 'CONFIRMED' && <Button title="Paciente Entregado" onClick={handleDeliveryModalOpen} color="blue" />}
 
 			<ConfirmModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onConfirm={handleConfirm} title={modalTitle} disabled={!selectedClinic}>
 				{actionType === 'confirm' && (
@@ -160,12 +159,16 @@ export default function ConfirmStrokeComponent({emergencyId, status = 'TO_AMBULA
 				title="¿Estás seguro que quieres registrar la entrega del paciente?"
 			>
 				<div className="mt-4">
-					<label className="block text-sm font-medium text-gray-700 mb-2">Fecha y hora de entrega (Hora Colombia)</label>
+					<label htmlFor="delivery-date" className="block text-sm font-medium text-gray-700 mb-2">
+						Fecha y hora de entrega (Hora Colombia)
+					</label>
 					<input
+						id="delivery-date"
 						type="datetime-local"
 						value={deliveryDate}
 						onChange={(e) => setDeliveryDate(e.target.value)}
 						className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+						data-testid="delivery-date"
 					/>
 				</div>
 			</ConfirmModal>

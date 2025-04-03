@@ -29,7 +29,7 @@ export function LoginForm() {
 	};
 
 	return (
-		<form onSubmit={handleSubmit} className="w-full max-w-sm space-y-6">
+		<form role="form" className="w-full max-w-sm space-y-6" onSubmit={handleSubmit}>
 			<div className="space-y-4">
 				<div>
 					<input
