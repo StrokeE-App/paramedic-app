@@ -4,11 +4,11 @@ import React, {useState, useEffect} from 'react';
 import {EmergencyInfo} from '@/types';
 import {ArrowBigLeft} from 'lucide-react';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 
-const DynamicMap = dynamic(() => import('@/components/Map'), {
-	ssr: false,
-});
+// const DynamicMap = dynamic(() => import('@/components/Map'), {
+// 	ssr: false,
+// });
 
 // Components
 import EmergencyInfoComponent from '@/components/EmergencyInfoComponent';
@@ -95,7 +95,7 @@ export default function EmergencyClientPage({params}: {params: Promise<{emergenc
 				<>
 					{' '}
 					<EmergencyInfoComponent emergency={emergency} />
-					<DynamicMap latitude={3.382325} longitude={-76.528043} />
+					{/* <DynamicMap latitude={3.382325} longitude={-76.528043} /> */}
 					<ConfirmStrokeComponent emergencyId={emergencyId} status={emergency.status} />
 				</>
 			)}
