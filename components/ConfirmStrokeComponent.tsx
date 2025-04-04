@@ -130,8 +130,8 @@ export default function ConfirmStrokeComponent({emergencyId, status = 'TO_AMBULA
 		<div className="w-10/12 max-w-md mx-auto flex flex-col space-y-4 mb-5">
 			{patientStatus === 'TO_AMBULANCE' && (
 				<>
-					<Button title="Confirmar Stroke" onClick={() => openModal('¿Estás seguro que quieres confirmar el stroke?', 'confirm')} color="red" />
-					<Button title="Descartar Stroke" onClick={() => openModal('¿Estás seguro que quieres descartar el stroke?', 'discard')} color="green" />
+					<Button title="Confirmar Stroke" onClick={() => openModal('¿Estás seguro que quieres confirmar el stroke?', 'confirm')} color="green" />
+					<Button title="Descartar Stroke" onClick={() => openModal('¿Estás seguro que quieres descartar el stroke?', 'discard')} color="red" />
 				</>
 			)}
 
