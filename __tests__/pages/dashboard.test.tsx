@@ -17,6 +17,8 @@ describe('Dashboard Page', () => {
 			emergencies: null,
 			isConnected: false,
 			error: null,
+			connect: jest.fn(),
+			disconnect: jest.fn(),
 		});
 
 		render(<Dashboard />);
@@ -28,6 +30,8 @@ describe('Dashboard Page', () => {
 			emergencies: undefined,
 			isConnected: false,
 			error: null,
+			connect: jest.fn(),
+			disconnect: jest.fn(),
 		});
 
 		render(<Dashboard />);
@@ -52,6 +56,8 @@ describe('Dashboard Page', () => {
 			emergencies: mockEmergencies,
 			isConnected: true,
 			error: null,
+			connect: jest.fn(),
+			disconnect: jest.fn(),
 		});
 
 		render(<Dashboard />);
@@ -65,6 +71,8 @@ describe('Dashboard Page', () => {
 			emergencies: null,
 			isConnected: false,
 			error: mockError,
+			connect: jest.fn(),
+			disconnect: jest.fn(),
 		});
 
 		render(<Dashboard />);
