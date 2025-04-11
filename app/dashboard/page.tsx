@@ -6,23 +6,23 @@ import SettingsMenu from '@/components/SettingsMenu';
 
 // Context
 import {useSseContext} from '@/context/SseContext';
-import {useEffect} from 'react';
+// import {useEffect} from 'react';
 
 export default function Dashboard() {
 	const {emergencies: data, isConnected, error, connect, disconnect} = useSseContext();
 
-	// Reconnect to SSE when the dashboard mounts
-	useEffect(() => {
-		// Disconnect any existing connection
-		disconnect();
-		// Connect to get fresh data
-		connect();
+	// // Reconnect to SSE when the dashboard mounts
+	// useEffect(() => {
+	// 	// Disconnect any existing connection
+	// 	disconnect();
+	// 	// Connect to get fresh data
+	// 	connect();
 
-		// Cleanup on unmount
-		return () => {
-			disconnect();
-		};
-	}, []);
+	// 	// Cleanup on unmount
+	// 	return () => {
+	// 		disconnect();
+	// 	};
+	// }, []);
 
 	console.log({data, isConnected, error});
 

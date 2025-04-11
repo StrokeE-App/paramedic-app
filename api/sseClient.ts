@@ -10,15 +10,15 @@ export function createEventSource(url: string): EventSourcePolyfill {
 	const eventSource = new EventSourcePolyfill(url, {
 		headers: {
 			Authorization: token ? `Bearer ${token}` : '',
-			Accept: 'text/event-stream',
-			'Cache-Control': 'no-cache',
+			// Accept: 'text/event-stream',
+			// 'Cache-Control': 'no-cache',
 		},
 		// withCredentials: true,
-		heartbeatTimeout: 30000, // 30 seconds
+		// heartbeatTimeout: 30000, // 30 seconds
 		// Add these options to match Postman behavior
-		withCredentials: false,
-		reconnect: true,
-		reconnectInterval: 1000,
+		// withCredentials: false,
+		// reconnect: true,
+		// reconnectInterval: 1000,
 	});
 
 	// Add connection state logging
