@@ -103,7 +103,7 @@ export const initializeFirebaseMessaging = async () => {
 export const subscribeToNotifications = async (role: string, userId: string, token: string, device: string) => {
 	try {
 		const response = await apiClient.post('/push-notifications/subscribe-notification', {
-			role,
+			role: 'paramedic',
 			userId,
 			token,
 			device,
@@ -118,7 +118,7 @@ export const subscribeToNotifications = async (role: string, userId: string, tok
 export const unsubscribeFromNotifications = async (role: string, userId: string, token: string) => {
 	try {
 		const response = await apiClient.post('/push-notifications/unsubscribe-notification', {
-			role,
+			role: 'paramedic',
 			userId,
 			token,
 		});
