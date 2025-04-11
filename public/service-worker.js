@@ -49,19 +49,33 @@ self.addEventListener('fetch', (event) => {
 		return event.respondWith(fetch(event.request));
 	}
 
+	// Skip caching for navigation requests (they might involve redirects)
+	if (event.request.mode === 'navigate') {
+		return event.respondWith(fetch(event.request));
+	}
+
+	// Skip caching for API requests
+	if (event.request.url.includes('/api/') || event.request.url.includes('/paramedic-notification/')) {
+		return event.respondWith(fetch(event.request));
+	}
+
 	event.respondWith(
 		caches.match(event.request).then((response) => {
 			return (
 				response ||
 				fetch(event.request)
 					.then((response) => {
-						// Only cache successful responses
-						if (response.ok) {
-							const responseToCache = response.clone();
-							caches.open('strokee-v1').then((cache) => {
-								cache.put(event.request, responseToCache);
-							});
+						// Don't cache redirects or error responses
+						if (!response.ok || response.type === 'opaqueredirect') {
+							return response;
 						}
+
+						// Clone the response before caching
+						const responseToCache = response.clone();
+						caches.open('strokee-v1').then((cache) => {
+							cache.put(event.request, responseToCache);
+						});
+
 						return response;
 					})
 					.catch(() => {

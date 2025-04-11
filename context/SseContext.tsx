@@ -17,6 +17,8 @@ interface SseContextType {
 	emergencies: EmergencyInfo[] | null;
 	isConnected: boolean;
 	error: Error | null;
+	connect: () => void;
+	disconnect: () => void;
 }
 
 const SseContext = createContext<SseContextType | undefined>(undefined);
@@ -26,7 +28,7 @@ export function SseProvider({children}: {children: ReactNode}) {
 	const {isAuthenticated, user} = useAuth();
 
 	// Always call the hook, but with a dummy URL when we don't have paramedic data
-	const {data, isConnected, error} = useSseEvents<EmergencyInfo[]>({
+	const {data, isConnected, error, connect, disconnect} = useSseEvents<EmergencyInfo[]>({
 		url: paramedicData
 			? `${process.env.NEXT_PUBLIC_NOTIFICATION_BACKEND_URL}/paramedic-notification/emergencies/${paramedicData.ambulanceId}`
 			: `${process.env.NEXT_PUBLIC_NOTIFICATION_BACKEND_URL}/paramedic-notification/emergencies/dummy`,
@@ -49,7 +51,7 @@ export function SseProvider({children}: {children: ReactNode}) {
 		fetchParamedicData();
 	}, [isAuthenticated, user?.uid]);
 
-	return <SseContext.Provider value={{emergencies: data, isConnected, error}}>{children}</SseContext.Provider>;
+	return <SseContext.Provider value={{emergencies: data, isConnected, error, connect, disconnect}}>{children}</SseContext.Provider>;
 }
 
 export function useSseContext() {
