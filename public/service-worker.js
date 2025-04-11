@@ -1,3 +1,34 @@
+importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/9.0.0/firebase-messaging-compat.js');
+
+// Initialize Firebase with your config
+firebase.initializeApp({
+	apiKey: 'AIzaSyByxLuZRV04bp8WgyGvfr2iWyq3blfXBP8',
+	authDomain: 'strokeeapp.firebaseapp.com',
+	projectId: 'strokeeapp',
+	storageBucket: 'strokeeapp.firebasestorage.app',
+	messagingSenderId: '1080629496007',
+	appId: '1:1080629496007:web:9cf1ffa3c217a76c6296e2',
+});
+
+const messaging = firebase.messaging();
+
+// Handle background messages
+messaging.onBackgroundMessage((payload) => {
+	console.log('Received background message:', payload);
+
+	const notificationTitle = payload.notification.title;
+	const notificationOptions = {
+		body: payload.notification.body,
+		icon: '/strokee-192x192.png',
+		badge: '/strokee-192x192.png',
+		data: payload.data,
+		actions: payload.data.actions || [],
+	};
+
+	self.registration.showNotification(notificationTitle, notificationOptions);
+});
+
 // Cache handling
 self.addEventListener('install', (event) => {
 	event.waitUntil(

@@ -1,11 +1,15 @@
 'use client';
 
-import {Settings, X} from 'lucide-react';
+import {Settings, X, Bell, BellOff} from 'lucide-react';
 import {useState, useEffect} from 'react';
 import {SignOut} from '@/firebase/config';
+import {useAuth} from '@/context/AuthContext';
+import {useNotifications} from '@/hooks/useNotifications';
 
 export default function SettingsMenu() {
 	const [isOpen, setIsOpen] = useState(false);
+	const {user} = useAuth();
+	const {isSubscribed, error, subscribe, unsubscribe} = useNotifications('paramedic', user?.uid || '');
 
 	// Close panel when pressing Escape key
 	useEffect(() => {
@@ -21,9 +25,24 @@ export default function SettingsMenu() {
 
 	const handleLogOut = async () => {
 		try {
+			if (isSubscribed) {
+				await unsubscribe();
+			}
 			await SignOut();
 		} catch (error) {
 			console.error('Error logging out:', error);
+		}
+	};
+
+	const handleNotificationToggle = async () => {
+		try {
+			if (isSubscribed) {
+				await unsubscribe();
+			} else {
+				await subscribe();
+			}
+		} catch (error) {
+			console.error('Error toggling notifications:', error);
 		}
 	};
 
@@ -49,6 +68,25 @@ export default function SettingsMenu() {
 					<h2 className="text-2xl font-medium">Hola,</h2>
 					<p className="text-2xl font-black">Paramédico!</p>
 					<X onClick={() => setIsOpen(false)} className="absolute top-6 right-6 w-6 h-6 cursor-pointer" />
+				</div>
+
+				{/* Panel Content */}
+				<div className="p-6">
+					{error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">{error}</div>}
+
+					<button onClick={handleNotificationToggle} className="flex items-center gap-2 text-gray-700 hover:text-customRed transition-colors mb-4">
+						{isSubscribed ? (
+							<>
+								<Bell className="w-5 h-5" />
+								<span>Desactivar notificaciones</span>
+							</>
+						) : (
+							<>
+								<BellOff className="w-5 h-5" />
+								<span>Activar notificaciones</span>
+							</>
+						)}
+					</button>
 				</div>
 
 				{/* Panel Footer with Logout Button */}
