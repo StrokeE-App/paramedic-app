@@ -9,7 +9,7 @@ import {useSseContext} from '@/context/SseContext';
 // import {useEffect} from 'react';
 
 export default function Dashboard() {
-	const {emergencies: data, isConnected, error, connect, disconnect} = useSseContext();
+	const {emergencies: data, isConnected, error} = useSseContext();
 
 	// // Reconnect to SSE when the dashboard mounts
 	// useEffect(() => {
